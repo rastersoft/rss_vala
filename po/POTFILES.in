@@ -1,0 +1,6 @@
+src/configuration.vala
+src/nameparser.vala
+src/rss_file.vala
+src/rss_vala.vala
+src/transmission_control.vala
+src/xml.vala
