@@ -40,17 +40,13 @@ namespace RssVala {
 			string separator;
 
 			this.shows.clear();
-		
-			var file = File.new_for_uri (this.uri);
-			try {
-				var dis = new DataInputStream (file.read ());
-				string line;
-				while ((line = dis.read_line (null)) != null) {
-				    data+=line;
-				}
-			} catch (Error e) {
-				return false; // can't access the RSS
-			}
+			
+			var session = new Soup.Session ();
+			var uri = new Soup.URI(this.uri);
+    		var message = new Soup.Message.from_uri ("GET",uri);
+    		
+			session.send_message(message);
+			data = (string)message.response_body.data;
 
 			var parser = new RssVala.sax_parser(data);
 

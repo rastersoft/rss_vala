@@ -82,15 +82,18 @@ int main(string[] argv) {
 	Gee.List<RssVala.show_data ?> shows;
 
 
-	while(1) {
+	while(true) {
 		config.read_configuration();
 
 		shows = new Gee.ArrayList<RssVala.show_data ?>();
 
 		foreach (var rss_server in config.servers) {
 			var element = new RssVala.rss_file(rss_server);
+			GLib.stdout.printf("Asking for %s\n",rss_server);
 			element.process_rss();
+			GLib.stdout.printf("Done\n");
 			foreach (var item in element.shows) {
+				GLib.stdout.printf("found item %s\n",item.filename);
 				shows.add(item);
 			}
 		}
@@ -98,7 +101,6 @@ int main(string[] argv) {
 		foreach (var search_string in config.series) {
 
 			string reg_exp_s;
-			int pos;
 		
 			reg_exp_s = search_string.replace(" ","[.\\- ]");
 
@@ -109,10 +111,12 @@ int main(string[] argv) {
 						continue; // already downloaded
 					}
 					if (item.magnet != null) {
-						RssVala.transmission.add_torrent(item.magnet,config);
+						print("Adding "+item.magnet+"\n");
+						RssVala.transmission.add_torrent(item.magnet,config,search_string);
 						config.add_downloaded_file(search_string,item.season,item.episode);
 					} else if (item.link != null) {
-						RssVala.transmission.add_torrent(item.link,config);
+						print("Adding "+item.link+"\n");
+						RssVala.transmission.add_torrent(item.link,config,search_string);
 						config.add_downloaded_file(search_string,item.season,item.episode);
 					}
 				}

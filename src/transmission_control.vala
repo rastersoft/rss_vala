@@ -20,16 +20,26 @@ namespace RssVala {
 
 	class transmission : Object {
 	
-		public static void add_torrent(string URL,configuration config) {
+		public static void add_torrent(string URL,configuration config,string search_string) {
 		
 			string data;
+			var dest_path = Path.build_filename(config.tb_dl_folder,search_string);
+			var folder = File.new_for_path(dest_path);
+			try {
+				folder.make_directory_with_parents();
+			} catch (Error e) {
+			}
+
 			if (config.tb_dl_folder == null) {
 				data = "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"%s\"}}".printf(URL);
 			} else {
-				data = "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"%s\",\"download-dir\":\"%s\"}}".printf(URL,config.tb_dl_folder);
+				data = "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"%s\",\"download-dir\":\"%s\"}}".printf(URL,dest_path);
 			}
 			var session = new Soup.Session ();
-			var uri = new Soup.URI("http://"+config.tb_rpc_url+"/rpc");
+			
+			var path = Path.build_filename("http://127.0.0.1/",config.tb_rpc_url,"/rpc");
+			print("Acceso a "+path+"\n");
+			var uri = new Soup.URI(path);
 			uri.set_port(config.tb_port);
     		var message = new Soup.Message.from_uri ("GET",uri);
     		
