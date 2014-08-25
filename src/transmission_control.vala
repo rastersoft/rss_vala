@@ -15,6 +15,7 @@
 using GLib;
 using Gee;
 using Soup;
+using Posix;
 
 namespace RssVala {
 
@@ -30,6 +31,8 @@ namespace RssVala {
 			} catch (Error e) {
 			}
 
+			Posix.chmod(dest_path,Posix.S_IRUSR | Posix.S_IWUSR | Posix.S_IXUSR | Posix.S_IRGRP | Posix.S_IWGRP | Posix.S_IXGRP | Posix.S_IROTH | Posix.S_IWOTH | Posix.S_IXOTH);
+
 			if (config.tb_dl_folder == null) {
 				data = "{\"method\":\"torrent-add\",\"arguments\":{\"filename\":\"%s\"}}".printf(URL);
 			} else {
@@ -38,7 +41,6 @@ namespace RssVala {
 			var session = new Soup.Session ();
 			
 			var path = Path.build_filename("http://127.0.0.1/",config.tb_rpc_url,"/rpc");
-			print("Acceso a "+path+"\n");
 			var uri = new Soup.URI(path);
 			uri.set_port(config.tb_port);
     		var message = new Soup.Message.from_uri ("GET",uri);
