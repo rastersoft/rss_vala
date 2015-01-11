@@ -98,6 +98,7 @@ int main(string[] argv) {
 			}
 		}
 
+		GLib.stdout.printf("Retrieved all data.\n");
 		foreach (var search_string in config.series) {
 
 			string reg_exp_s;

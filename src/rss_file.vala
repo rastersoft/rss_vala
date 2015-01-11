@@ -47,7 +47,10 @@ namespace RssVala {
     		
 			session.send_message(message);
 			data = (string)message.response_body.data;
-
+			if (data == null) {
+				GLib.stdout.printf("Data read is null\n");
+				return false;
+			}
 			var parser = new RssVala.sax_parser(data);
 
 			bool is_atom;

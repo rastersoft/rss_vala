@@ -140,7 +140,6 @@ namespace RssVala {
 			this.text=txt;
 			this.next=thenext;
 			this.prev=null;
-			this.prev=null;
 			this.child=null;
 			this.split(' ');
 			this.split('-');
@@ -448,8 +447,10 @@ namespace RssVala {
 							if (last==element2) {
 								last=element2.prev;
 							}
-							element2.prev.next=element2.next;
-							element2.prev=null;
+							if (element2.prev != null) {
+								element2.prev.next=element2.next;
+								element2.prev=null;
+							}
 						}
 					}
 				}

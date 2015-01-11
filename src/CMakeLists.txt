@@ -8,6 +8,7 @@ set (RELEASE_NAME "rss_vala")
 set (CMAKE_C_FLAGS "")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (VERSION "0.1")
+set (TESTSRCDIR "${CMAKE_SOURCE_DIR}")
 set (DOLLAR "$")
 
 configure_file (${CMAKE_SOURCE_DIR}/src/Config.vala.cmake ${CMAKE_BINARY_DIR}/src/Config.vala)
@@ -36,10 +37,25 @@ set (APP_SOURCES ${APP_SOURCES} rss_vala.vala)
 set (APP_SOURCES ${APP_SOURCES} transmission_control.vala)
 set (APP_SOURCES ${APP_SOURCES} xml.vala)
 
+if (DEBUG)
+	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -D DEBUG)
+endif ()
+if (DEBUG)
+	set (COMPILE_OPTIONS ${COMPILE_OPTIONS} -g )
+endif ()
+
+
+if (DEBUG)
+	set (CMAKE_C_FLAGS ${CMAKE_C_FLAGS} " -g " )
+endif ()
+
+
 vala_precompile(VALA_C rss_vala
 	${APP_SOURCES}
 PACKAGES
 	${VALA_PACKAGES}
+OPTIONS
+	${COMPILE_OPTIONS}
 )
 
 add_executable(rss_vala ${VALA_C})
